@@ -48,18 +48,69 @@ for(var i = 1; i < 14; i++) {
 }
 
 // now build the notes
-for(let i = 0; i < 80; i++) {
-	// let note = Math.floor(Math.random()*15)*2;
-	let note = (i%15)*2;
-	let circle = SVG.circle(music_left + note, music_top + i*3, radius);
-	sketch.appendChild(circle);
-}
+// for(let i = 0; i < 80; i++) {
+// 	// let note = Math.floor(Math.random()*15)*2;
+// 	let note = (i%15)*2;
+// 	let circle = SVG.circle(music_left + note, music_top + i*3, radius);
+// 	sketch.appendChild(circle);
+// }
 
+
+// // Binary Yes/No
+// loadCSV("https://raw.githubusercontent.com/gotdairyya/musical-data/master/affordable-housing-NYC-2017.csv", function(data) {
+// 	for (let i=0; i < data.length; i++) {
+// 		if (data[i]["affordable?"] === "No") {
+// 			MinorChord(i);
+// 		}
+// 		else if (data[i]["affordable?"] === "Yes") {
+// 			MajorChord(i);
+// 		}
+// 		else {}
+// 	}
+
+// });
+
+// Pitch and Scales
 loadCSV("https://raw.githubusercontent.com/gotdairyya/musical-data/master/affordable-housing-NYC-2017.csv", function(data) {
-	
-	console.log(data);
+	for (let i=0; i < data.length; i++) {
+
+		if(!isNaN(parseFloat(data[i]["%income"]))) {
+			raw(i, data[i]["%income"]);
+		};		
+
+		if (data[i]["affordable?"] === "Yes") {
+			MajorChord(i);
+		}
+		else {}
+	}
 
 });
 
+function MajorChord(i) {
+	// C-E-G
+	let C = SVG.circle(music_left + 0*2, music_top + i*3, radius);
+	let E = SVG.circle(music_left + 2*2, music_top + i*3, radius);
+	let G = SVG.circle(music_left + 4*2, music_top + i*3, radius);
+	sketch.appendChild(C);
+	sketch.appendChild(E);
+	sketch.appendChild(G);
+}
+
+function MinorChord(i) {
+	//  E-F
+	let E = SVG.circle(music_left + 2*2, music_top + i*3, radius);
+	let F = SVG.circle(music_left + 3*2, music_top + i*3, radius);
+	sketch.appendChild(F);
+	sketch.appendChild(E);
+}
+
+function raw(i, affordability) { //indicated pitch of data representing how good or bad
+	let min = 0.2523;
+	let max = 1.68875;
+
+	let pct = (affordability-min) / (max-min);
+	let circle = SVG.circle(music_left + parseInt(7 + pct*7)*2, music_top + i*3, radius);
+	sketch.appendChild(circle);
+}
 
 </script>
