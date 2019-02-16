@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <title>svg</title>
+<script type="text/javascript" src="load-csv.js"></script>
 <script type="text/javascript" src="svg.js"></script>
 <script>
 
@@ -15,23 +16,32 @@ let music_height = 320;
 let music_left = (page_width-music_width)/2;
 let music_top = 20; // top margin
 
+// pen and cutter are mis-aligned
+let cricut_x_error = 0.2;
+
 // the svg image
 let sketch = SVG.Image(page_width, page_height);
+sketch.onMouseDown = function(mouse) { sketch.save(); }
 
-// boundary rectangle
+// boundary cut rectangle
 let rect = SVG.rect(0, 0, 41, page_height);
 rect.setAttribute("fill", "none");
 rect.setAttribute("stroke", "black");
 sketch.appendChild(rect);
 
 // draw the piano roll
-let music = SVG.rect(music_left, music_top, music_width, music_height);
+let music = SVG.rect(music_left + cricut_x_error, music_top, music_width, music_height);
 music.setAttribute("fill", "none");
 music.setAttribute("stroke", "black");
 sketch.appendChild(music);
 // a vertical line for each note
 for(var i = 1; i < 14; i++) {
-	let line = SVG.line(music_left + i*2, music_top, music_left + i*2, music_top + music_height);
+	let line = SVG.line(
+		music_left + i*2 + cricut_x_error, 
+		music_top, 
+		music_left + i*2 + cricut_x_error, 
+		music_top + music_height
+	);
 	line.setAttribute("stroke", "black");
 	line.setAttribute("stroke-width", 0.25);
 	sketch.appendChild(line);
@@ -45,6 +55,9 @@ for(let i = 0; i < 80; i++) {
 	let circle = SVG.circle(music_left + note, music_top + i*3, radius);
 	sketch.appendChild(circle);
 }
+
+
+// loadCSV("")
 
 
 </script>
