@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<title>svg</title>
+<script type="text/javascript" src="svg.js"></script>
+<script>
+
+// first, some variables
+// everything is in millimeters! :)
+// note circle sizes
+let radius = 1.5;
+// music space
+let page_width = 41;
+let page_height = 400;
+let music_width = 28
+let music_height = 320;
+let music_left = (page_width-music_width)/2;
+let music_top = 20; // top margin
+
+// the svg image
+let sketch = SVG.Image(page_width, page_height);
+
+// boundary rectangle
+let rect = SVG.rect(0, 0, 41, page_height);
+rect.setAttribute("fill", "none");
+rect.setAttribute("stroke", "black");
+sketch.appendChild(rect);
+
+// draw the piano roll
+let music = SVG.rect(music_left, music_top, music_width, music_height);
+music.setAttribute("fill", "none");
+music.setAttribute("stroke", "black");
+sketch.appendChild(music);
+// a vertical line for each note
+for(var i = 1; i < 14; i++) {
+	let line = SVG.line(music_left + i*2, music_top, music_left + i*2, music_top + music_height);
+	line.setAttribute("stroke", "black");
+	line.setAttribute("stroke-width", 0.25);
+	sketch.appendChild(line);
+}
+
+
+// now build the notes
+for(let i = 0; i < 80; i++) {
+	// let note = Math.floor(Math.random()*15)*2;
+	let note = (i%15)*2;
+	let circle = SVG.circle(music_left + note, music_top + i*3, radius);
+	sketch.appendChild(circle);
+}
+
+
+</script>
